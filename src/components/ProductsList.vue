@@ -19,7 +19,7 @@
                 <button v-else class="add-to-cart-button incart">
                     <img src="/images/icon-decrement-quantity.svg" alt="Decrement quantity" class="decrement"
                         @click="$emit('decrement-product', product.name)">
-                    {{amountInCart(product.name)}}
+                    {{ amountInCart(product.name) }}
                     <img src="/images/icon-increment-quantity.svg" alt="Increment quantity" class="increment"
                         @click="$emit('add-product', product.name)">
                 </button>
@@ -70,6 +70,7 @@ export default {
 
         .product-image {
             max-width: 15rem;
+            margin-bottom: 2rem;
 
             border-radius: .5rem;
         }
@@ -78,9 +79,8 @@ export default {
             position: relative;
             list-style-type: none;
 
-            img {
-                margin-bottom: 2rem;
-            }
+            // img {
+            // }
 
             h3 {
                 opacity: .5;
@@ -95,10 +95,11 @@ export default {
 
 .add-to-cart-button {
     position: absolute;
-    bottom: 26%;
+    bottom: 27.5%;
     left: 15%;
 
     width: 10.5rem;
+    height: 2.25rem;
 
     display: flex;
     justify-content: center;
@@ -143,9 +144,12 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    font-weight: 500;
+
+    border: none;
+
     background-color: var(--red);
     color: white;
-    font-weight: 500;
 
     img {
         width: 1.5rem;
@@ -158,7 +162,8 @@ export default {
 
         cursor: pointer;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             background-color: rgba($color: #ffffff, $alpha: .25);
         }
     }
