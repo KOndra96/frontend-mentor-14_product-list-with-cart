@@ -3,20 +3,22 @@
         <h2 class="color-red">Your Cart ({{ allItemsAmount() }})</h2>
         <div v-if="totalAmountInCart() > 0">
             <ul>
-                <li v-for="item in this.cart" class="flex">
-                    <div class="info">
-                        <p>
-                            <strong>{{ item.name }}</strong>
-                        </p>
-                        <p>
-                            <span class="color-red quantity"><strong>{{ item.quantity }}x</strong></span>
-                            <span class="opacity-50 price-per-unit">@ ${{ item.pricePerUnit.toFixed(2) }}</span>
-                            <span class="color-rose-500 price-total">${{ item.priceTotal.toFixed(2) }}</span>
-                        </p>
+                <li v-for="item in this.cart.filter(item => item.quantity > 0)">
+                    <div v-if="item.quantity > 0" class="flex item-container">
+                        <div class="info">
+                            <p>
+                                <strong>{{ item.name }}</strong>
+                            </p>
+                            <p>
+                                <span class="color-red quantity"><strong>{{ item.quantity }}x</strong></span>
+                                <span class="opacity-50 price-per-unit">@ ${{ item.pricePerUnit.toFixed(2) }}</span>
+                                <span class="color-rose-500 price-total">${{ item.priceTotal.toFixed(2) }}</span>
+                            </p>
+                        </div>
+                        <button @click="$emit('remove-product', item.name)">
+                            <img src="/images/icon-remove-item.svg" alt="remove item">
+                        </button>
                     </div>
-                    <button>
-                        <img src="/images/icon-remove-item.svg" alt="remove item">
-                    </button>
                 </li>
             </ul>
             <div class="flex order-total">
@@ -84,16 +86,17 @@ export default {
         padding: 0;
 
         li {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-
             margin-bottom: 1rem;
 
             border-bottom: .0625rem solid var(--rose-100);
 
             font-size: .9rem;
+
+            .item-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
 
             .info {
 

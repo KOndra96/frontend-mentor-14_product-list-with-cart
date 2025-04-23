@@ -9,16 +9,19 @@
                 <p><strong>{{ product.name }}</strong></p>
                 <p class="color-red"><strong>${{ product.price.toFixed(2) }}</strong></p>
 
-                <button class="add-to-cart-button" v-if="isInCart" @click="$emit('add-product', product.name)">
+                <button v-if="!isInCart(product.name)" class="add-to-cart-button"
+                    @click="$emit('add-product', product.name)">
                     <div>
                         <img src="/images/icon-add-to-cart.svg" class="add-to-cart-image" alt="Add to Cart">
                         Add to Cart
                     </div>
                 </button>
                 <button v-else class="add-to-cart-button incart">
-                    <img src="/images/icon-decrement-quantity.svg" alt="Decrement quantity" class="decrement">
-                    54 <!-- amount of item in cart -->
-                    <img src="/images/icon-increment-quantity.svg" alt="Increment quantity" class="increment">
+                    <img src="/images/icon-decrement-quantity.svg" alt="Decrement quantity" class="decrement"
+                        @click="$emit('decrement-product', product.name)">
+                    {{amountInCart(product.name)}}
+                    <img src="/images/icon-increment-quantity.svg" alt="Increment quantity" class="increment"
+                        @click="$emit('add-product', product.name)">
                 </button>
             </li>
         </ul>
@@ -40,9 +43,14 @@ export default {
     },
     emits: ['add-product'],
     methods: {
-        isInCart() {
-            console.log(...this.cart);
+        isInCart(productName) {
+            const routeToItemInCart = this.cart.find(item => item.name === productName)
+            if (routeToItemInCart && routeToItemInCart.quantity > 0) return true;
+            return false;
         },
+        amountInCart(productName) {
+            return this.cart.find(item => item.name === productName).quantity;
+        }
     }
 }
 </script>
@@ -96,8 +104,6 @@ export default {
     justify-content: center;
     align-items: center;
 
-    cursor: pointer;
-
     padding: .5rem 2rem;
     border-style: solid;
     border-radius: 3rem;
@@ -120,6 +126,7 @@ export default {
     &:focus,
     &:active {
         &:not(.incart) {
+            cursor: pointer;
             border: .0625rem solid var(--red);
             background-color: var(--red);
             color: white;
@@ -132,10 +139,29 @@ export default {
 }
 
 .incart {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    background-color: var(--red);
+    color: white;
+    font-weight: 500;
+
+    img {
+        width: 1.5rem;
+        height: 1.5rem;
+
+        padding: .25rem;
+
+        border-radius: 100%;
+        border: .0625rem solid white;
+
+        cursor: pointer;
+
+        &:hover, &:focus {
+            background-color: rgba($color: #ffffff, $alpha: .25);
+        }
+    }
 }
 
 // .incart {

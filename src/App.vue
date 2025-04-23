@@ -1,7 +1,7 @@
 <template>
   <main id="eshop">
-    <ProductsList :products="productsList" :cart="cart" @add-product="handleAddToCart" />
-    <Cart :cart="cart" />
+    <ProductsList :products="productsList" :cart="cart" @add-product="handleAddToCart" @decrement-product="handleDecrementProduct" />
+    <Cart :cart="cart" @remove-product="handleRemoveProduct" />
   </main>
 </template>
 
@@ -31,8 +31,22 @@ function handleAddToCart(productName) {
   } else {
     changeAmountBy(productName, 1);
   }
+}
 
-  console.log(...cart.value);
+function handleDecrementProduct(productName) {
+  if (!isProductInCart(productName)) {
+    console.error('Product is not in cart!')
+  } else {
+    changeAmountBy(productName, -1);
+  }
+}
+
+function handleRemoveProduct(productName) {
+  if (!isProductInCart(productName)) {
+    console.error('Product is not in cart!')
+  } else {
+    changeAmountTo(productName, 0);
+  }
 }
 
 function isProductInCart(productName) {
@@ -53,7 +67,15 @@ function changeAmountBy(productName, amount) {
   const productIndex = cart.value.findIndex(item => item.name === productName);
   if (productIndex === -1) return console.error('Product not found when adding to cart!');
 
-  cart.value[productIndex].quantity++;
+  cart.value[productIndex].quantity += amount;
+  cart.value[productIndex].priceTotal = cart.value[productIndex].pricePerUnit * cart.value[productIndex].quantity;
+}
+
+function changeAmountTo(productName, amount) {
+  const productIndex = cart.value.findIndex(item => item.name === productName);
+  if (productIndex === -1) return console.error('Product not found when adding to cart!');
+
+  cart.value[productIndex].quantity = amount;
   cart.value[productIndex].priceTotal = cart.value[productIndex].pricePerUnit * cart.value[productIndex].quantity;
 }
 
