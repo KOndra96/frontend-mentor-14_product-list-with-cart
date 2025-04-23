@@ -1,2 +1,2 @@
-# Vue 3 + Vite
+# Frontend Mentor - Product List with Cart
 Boooo
